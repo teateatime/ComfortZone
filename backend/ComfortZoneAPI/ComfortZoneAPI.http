@@ -1,0 +1,6 @@
+@ComfortZoneAPI_HostAddress = http://localhost:5205
+
+GET {{ComfortZoneAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

@@ -1,4 +1,13 @@
-import { AppBar, Toolbar, Typography, Box, Button, IconButton, Menu, MenuItem } from '@mui/material';
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Box,
+  Button,
+  IconButton,
+  Menu,
+  MenuItem,
+} from '@mui/material';
 import { Link } from 'react-router-dom';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useState } from 'react';
@@ -28,20 +37,34 @@ function Navbar({ variant }: { variant?: 'default' | 'jobsearch' }) {
     },
   };
 
+  const logoLink = variant === 'jobsearch' ? '/home' : '/';
+
   return (
     <AppBar position="fixed" sx={{ ...styles[variant || 'default'] }}>
       <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
-        <Typography component={Link} to="/home" variant="h6" color="inherit">
+        <Typography
+          component={Link}
+          to={logoLink}
+          variant="h6"
+          color="inherit"
+          sx={{ textDecoration: 'none' }}
+        >
           ComfortZone
         </Typography>
+
         <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 2 }}>
-          {variant !== 'jobsearch' && (
-            <Button component={Link} to="/home" color="inherit">
-              Search For Jobs
-            </Button>
-          )}
+          <Button component={Link} to="/home" color="inherit">
+            Home
+          </Button>
+          <Button component={Link} to="/about" color="inherit">
+            About
+          </Button>
+          <Button component={Link} to="/salary" color="inherit">
+            Salary History
+          </Button>
           <Button color="inherit">Login/Signup</Button>
         </Box>
+
         <IconButton
           sx={{ display: { xs: 'block', md: 'none' } }}
           color="inherit"
@@ -50,6 +73,7 @@ function Navbar({ variant }: { variant?: 'default' | 'jobsearch' }) {
         >
           <MenuIcon />
         </IconButton>
+
         <Menu
           anchorEl={anchorEl}
           open={open}
@@ -57,11 +81,15 @@ function Navbar({ variant }: { variant?: 'default' | 'jobsearch' }) {
           anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
           transformOrigin={{ vertical: 'top', horizontal: 'right' }}
         >
-          {variant !== 'jobsearch' && (
-            <MenuItem onClick={handleMenuClose} component={Link} to="/home">
-              Search For Jobs
-            </MenuItem>
-          )}
+          <MenuItem onClick={handleMenuClose} component={Link} to="/home">
+            Home
+          </MenuItem>
+          <MenuItem onClick={handleMenuClose} component={Link} to="/about">
+            About
+          </MenuItem>
+          <MenuItem onClick={handleMenuClose} component={Link} to="/salary">
+            Salary History
+          </MenuItem>
           <MenuItem onClick={handleMenuClose}>Login/Signup</MenuItem>
         </Menu>
       </Toolbar>

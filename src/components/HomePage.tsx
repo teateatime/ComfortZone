@@ -70,6 +70,12 @@ function HomePage() {
     }
   };
 
+  const handleJobClick = (job: any) => {
+    // Save the entire job object to localStorage
+    localStorage.setItem('selectedJob', JSON.stringify(job));
+    navigate(`/job-description`);
+  };  
+
   return (
     <>
       <Navbar variant="jobsearch" />
@@ -95,16 +101,79 @@ function HomePage() {
           <Grid container spacing={3}>
             {jobs.map((job) => (
               <Grid item xs={12} sm={6} md={4} key={job.id}>
-                <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', boxShadow: 3 }}>
-                  <CardContent>
-                    <Typography variant="h6">{job.title}</Typography>
-                    <Typography variant="body2" color="textSecondary">
+                <Card 
+                  sx={{ 
+                    display: 'flex', 
+                    flexDirection: 'column',
+                    height: '100%',
+                    minHeight: '200px',
+                    maxHeight: '200px',
+                    boxShadow: 3
+                  }}
+                >
+                  <CardContent 
+                    sx={{ 
+                      flex: '1 0 auto',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: 1,
+                      overflow: 'hidden'
+                    }}
+                  >
+                    <Typography 
+                      variant="h6" 
+                      sx={{
+                        fontSize: '1rem',
+                        fontWeight: 600,
+                        display: '-webkit-box',
+                        WebkitBoxOrient: 'vertical',
+                        WebkitLineClamp: 2,
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        lineHeight: 1.2,
+                        mb: 1
+                      }}
+                    >
+                      {job.title}
+                    </Typography>
+                    <Typography 
+                      variant="body2" 
+                      color="textSecondary"
+                      sx={{
+                        display: '-webkit-box',
+                        WebkitBoxOrient: 'vertical',
+                        WebkitLineClamp: 1,
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis'
+                      }}
+                    >
                       {job.company.display_name} - {job.location.display_name}
                     </Typography>
                   </CardContent>
-                  <CardActions>
-                    <Button size="small" color="primary" href={job.redirect_url} target="_blank" rel="noopener noreferrer">
-                      View Job
+                  <CardActions 
+                    sx={{ 
+                      justifyContent: 'space-between',
+                      padding: 2,
+                      borderTop: '1px solid rgba(0, 0, 0, 0.12)'
+                    }}
+                  >
+                    <Button 
+                      size="small" 
+                      color="primary" 
+                      href={job.redirect_url} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      sx={{ minWidth: 'auto' }}
+                    >
+                      View Job on Adzuna
+                    </Button>
+                    <Button
+                      size="small"
+                      color="primary"
+                      onClick={() => handleJobClick(job)}
+                      sx={{ minWidth: 'auto' }}
+                    >
+                      Details
                     </Button>
                   </CardActions>
                 </Card>

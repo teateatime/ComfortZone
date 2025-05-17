@@ -6,6 +6,13 @@ export default defineConfig({
   server: {
     watch: {
       usePolling: true, // Enable polling for file changes
+    },
+    proxy: {
+      '/api': {
+        target: 'https://api.adzuna.com',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ''),
+      },
     }
   }
 })

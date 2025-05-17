@@ -21,6 +21,7 @@ import {
   Checkbox,
   FormGroup,
   FormControlLabel,
+  Alert,
 } from '@mui/material';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import axios from 'axios';
@@ -39,7 +40,8 @@ function SearchPage() {
   // Filters
   const [jobTypeFilter, setJobTypeFilter] = useState<string[]>([]);
   const [salaryFilter, setSalaryFilter] = useState<string>('');
-  const [country, setCountry] = useState<string>('us');
+  // const [country, setCountry] = useState<string>('us');
+  const [experienceLevel, setExperienceLevel] = useState<string>('');
 
   const APP_ID = 'eb5d5bed';
   const APP_KEY = '5e413592809866c590cb33e535588b40';
@@ -53,8 +55,7 @@ function SearchPage() {
       setLoading(true);
       setError(null);
 
-      // Create cache key based on query and filters
-      const cacheKey = `${searchInput}-${currentPage}-${jobTypeFilter.join(',')}-${salaryFilter}-${country}`;
+      const cacheKey = `${searchInput}-${currentPage}-${jobTypeFilter.join(',')}-${salaryFilter}-${experienceLevel}`;
       const cachedData = localStorage.getItem(cacheKey);
 
       if (cachedData) {
@@ -72,10 +73,16 @@ function SearchPage() {
           }
           if (salaryFilter) filters.push(`salary_min=${salaryFilter}`);
 
+          // Note: Experience level filtering would go here if supported by the API
+          let searchTerm = searchInput;
+          if (experienceLevel) {
+            searchTerm = `${searchTerm} ${experienceLevel}`;
+          }
+
           const queryString = filters.length ? `&${filters.join('&')}` : '';
           const response = await axios.get(
-            `https://api.adzuna.com/v1/api/jobs/${country}/search/${currentPage}?app_id=${APP_ID}&app_key=${APP_KEY}&results_per_page=${RESULTS_PER_PAGE}&what=${encodeURIComponent(
-              searchInput
+            `https://api.adzuna.com/v1/api/jobs/us/search/${currentPage}?app_id=${APP_ID}&app_key=${APP_KEY}&results_per_page=${RESULTS_PER_PAGE}&what=${encodeURIComponent(
+              searchTerm
             )}${queryString}&content-type=application/json`
           );
 
@@ -86,7 +93,6 @@ function SearchPage() {
           setJobs(data.results);
           setTotalJobs(data.count);
 
-          // Store in localStorage
           localStorage.setItem(cacheKey, JSON.stringify(data));
         } catch (error) {
           setError('Failed to fetch jobs. Please try again later.');
@@ -97,7 +103,7 @@ function SearchPage() {
     };
 
     if (searchInput) fetchJobs();
-  }, [searchInput, currentPage, jobTypeFilter, salaryFilter, country]);
+  }, [searchInput, currentPage, jobTypeFilter, salaryFilter, experienceLevel]);
 
   const handleSearchSubmit = () => {
     setCurrentPage(1);
@@ -111,6 +117,12 @@ function SearchPage() {
   const handlePageChange = (event: React.ChangeEvent<unknown>, page: number) => {
     setCurrentPage(page);
   };
+
+  const handleJobClick = (job: any) => {
+    // Save the entire job object to localStorage
+    localStorage.setItem('selectedJob', JSON.stringify(job));
+    navigate(`/job-description`);
+  };  
 
   return (
     <>
@@ -138,13 +150,13 @@ function SearchPage() {
           <Box sx={{ width: 300, padding: '1rem' }}>
             <Typography variant="h6">Filter Jobs</Typography>
 
-            <FormControl fullWidth sx={{ marginBottom: '1rem', marginTop: '1rem' }}>
+            {/* <FormControl fullWidth sx={{ marginBottom: '1rem', marginTop: '1rem' }}>
               <InputLabel>Country</InputLabel>
               <Select value={country} onChange={(e) => setCountry(e.target.value)} label="Country">
                 <MenuItem value="us">US</MenuItem>
                 <MenuItem value="gb">UK</MenuItem>
               </Select>
-            </FormControl>
+            </FormControl> */}
 
             <FormGroup>
               <Typography variant="subtitle1">Job Type</Typography>
@@ -180,7 +192,21 @@ function SearchPage() {
               />
             </FormGroup>
 
-            <FormControl fullWidth sx={{ marginBottom: '1rem', marginTop: '1rem' }} variant="outlined">
+            <FormControl fullWidth sx={{ marginY: '1rem' }}>
+              <InputLabel>Experience Level</InputLabel>
+              <Select
+                value={experienceLevel}
+                onChange={(e) => setExperienceLevel(e.target.value)}
+                label="Experience Level"
+              >
+                <MenuItem value="">Any</MenuItem>
+                <MenuItem value="entry level">Entry Level</MenuItem>
+                <MenuItem value="mid level">Mid Level</MenuItem>
+                <MenuItem value="senior">Senior Level</MenuItem>
+              </Select>
+            </FormControl>
+
+            <FormControl fullWidth sx={{ marginBottom: '1rem' }}>
               <InputLabel>Minimum Salary</InputLabel>
               <Select
                 value={salaryFilter}
@@ -192,6 +218,10 @@ function SearchPage() {
                 <MenuItem value="100000">100,000</MenuItem>
               </Select>
             </FormControl>
+
+            <Alert severity="info" sx={{ marginTop: 2 }}>
+              Experience level filtering uses keyword search and may not be 100% accurate due to API limitations.
+            </Alert>
           </Box>
         </Drawer>
 
@@ -209,22 +239,78 @@ function SearchPage() {
             <Grid container spacing={3}>
               {jobs.map((job) => (
                 <Grid item xs={12} sm={6} md={4} key={job.id}>
-                  <Card sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-                    <CardContent>
-                      <Typography variant="h6">{job.title}</Typography>
-                      <Typography variant="body2" color="textSecondary">
+                  <Card 
+                    sx={{ 
+                      display: 'flex', 
+                      flexDirection: 'column', 
+                      height: '100%',
+                      minHeight: '200px', // Set minimum height
+                      maxHeight: '200px', // Set maximum height
+                    }}
+                  >
+                    <CardContent 
+                      sx={{ 
+                        flex: '1 0 auto',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: 1,
+                        overflow: 'hidden'
+                      }}
+                    >
+                      <Typography 
+                        variant="h6" 
+                        sx={{
+                          fontSize: '1rem',
+                          fontWeight: 600,
+                          display: '-webkit-box',
+                          WebkitBoxOrient: 'vertical',
+                          WebkitLineClamp: 2,
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          lineHeight: 1.2,
+                          mb: 1
+                        }}
+                      >
+                        {job.title}
+                      </Typography>
+                      <Typography 
+                        variant="body2" 
+                        color="textSecondary"
+                        sx={{
+                          display: '-webkit-box',
+                          WebkitBoxOrient: 'vertical',
+                          WebkitLineClamp: 1,
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis'
+                        }}
+                      >
                         {job.company?.display_name} - {job.location?.display_name}
                       </Typography>
                     </CardContent>
-                    <CardActions>
+                    <CardActions 
+                      sx={{ 
+                        justifyContent: 'space-between',
+                        padding: 2,
+                        borderTop: '1px solid rgba(0, 0, 0, 0.12)'
+                      }}
+                    >
+                      <Button 
+                        size="small" 
+                        color="primary" 
+                        href={job.redirect_url} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        sx={{ minWidth: 'auto' }}
+                      >
+                        View Job on Adzuna
+                      </Button>
                       <Button
                         size="small"
                         color="primary"
-                        href={job.redirect_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
+                        onClick={() => handleJobClick(job)}
+                        sx={{ minWidth: 'auto' }}
                       >
-                        View Job
+                        Details
                       </Button>
                     </CardActions>
                   </Card>

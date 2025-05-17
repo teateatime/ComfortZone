@@ -5,7 +5,9 @@ import './css/index.css';
 import LandingPage from './components/LandingPage.tsx';
 import HomePage from './components/HomePage.tsx';
 import SearchPage from './components/SearchPage.tsx';
-import JobViewPage from './components/JobViewPage.tsx';
+import DescriptionPage from './components/DescriptionPage.tsx';
+import SalaryPage from './components/SalaryPage.tsx';
+import AboutPage from './components/AboutPage.tsx';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -17,9 +19,13 @@ createRoot(document.getElementById('root')!).render(
         <Route path="/home" element={<HomePage />} />
         {/* Search Page */}
         <Route path="/search" element={<SearchPage />} />
-        {/* Job View Page */}
-        <Route path="/jobview" element={<JobViewPage />} />
+        {/* Job Description Page */}
+        <Route path="/job-description" element={<DescriptionPage />} />
+        {/* Salary History Page */}
+        <Route path="/salary" element={<SalaryPage />} />
+        {/* About Page */}
+        <Route path="/about" element={<AboutPage />} />
       </Routes>
     </Router>
-  </StrictMode>,
+  </StrictMode>
 );

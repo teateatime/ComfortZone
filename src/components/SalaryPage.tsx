@@ -110,9 +110,17 @@ const SalaryHistory: React.FC = () => {
     : [];
 
   return (
-    <Box sx={{ pt: 10, minHeight: '100vh', bgcolor: '#f4f6f8', fontFamily: 'Arial, sans-serif' }}>
+    <Box
+      sx={{
+        pt: 10,
+        minHeight: '100vh',
+        minWidth: '100vw',
+        bgcolor: '#f4f6f8',
+        fontFamily: 'Arial, sans-serif',
+      }}
+    >
       <Navbar variant="jobsearch" />
-      <Container maxWidth="lg" sx={{ py: 4 }}>
+      <Container>
         <Typography variant="h4" align="center" gutterBottom>
           Salary History
         </Typography>
@@ -142,110 +150,110 @@ const SalaryHistory: React.FC = () => {
           </Box>
         )}
 
-        {error && <Alert severity="error">{error}</Alert>}
+        {error && (
+          <Alert severity="error" sx={{ my: 2 }}>
+            {error}
+          </Alert>
+        )}
 
         {!loading && salaryData && (
           <Container maxWidth="xl" sx={{ py: 4 }}>
             <Grid container spacing={4} justifyContent="center">
-              <Grid item xs={12} md={6} lg={6}>
-                {/* Monthly Salaries */}
-                <Grid item xs={12} md={7} lg={7}>
-                  <Paper
-                    elevation={3}
+              {/* Monthly Salaries */}
+              <Grid item xs={12} md={6}>
+                <Paper
+                  elevation={3}
+                  sx={{
+                    minWidth: 350,
+                    height: 650,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    p: 3,
+                    '@media (max-width:450px)': {
+                      height: 400,
+                      minWidth: 'auto',
+                    },
+                  }}
+                >
+                  <Typography variant="h5" gutterBottom>
+                    Monthly Salaries
+                  </Typography>
+                  <List
+                    dense
                     sx={{
-                      minWidth: 350,
-                      height: 650,
-                      display: 'flex',
-                      flexDirection: 'column',
-                      p: 3,
-                      '@media (max-width:450px)': {
-                        height: 400,
-                        minWidth: 'auto',
-                      },
+                      overflowY: 'auto',
+                      flexGrow: 1,
+                      fontSize: '1.1rem',
                     }}
                   >
-                    <Typography variant="h5" gutterBottom>
-                      Monthly Salaries
-                    </Typography>
-                    <List
-                      dense
-                      sx={{
-                        overflowY: 'auto',
-                        flexGrow: 1,
-                        fontSize: '1.1rem',
-                      }}
-                    >
-                      {getSortedMonths(salaryData.month).map((month) => (
-                        <ListItem key={month}>
-                          <ListItemText
-                            primary={formatMonth(month)}
-                            secondary={
-                              <Typography
-                                component="span"
-                                sx={{ color: '#4dabf5', fontWeight: 'bold' }}
-                              >
-                                ${salaryData.month[month].toLocaleString()}
-                              </Typography>
-                            }
-                            primaryTypographyProps={{ fontSize: '1.1rem' }}
-                            secondaryTypographyProps={{ fontSize: '1rem' }}
-                          />
-                        </ListItem>
-                      ))}
-                    </List>
-                  </Paper>
-                </Grid>
+                    {getSortedMonths(salaryData.month).map((month) => (
+                      <ListItem key={month}>
+                        <ListItemText
+                          primary={formatMonth(month)}
+                          secondary={
+                            <Typography
+                              component="span"
+                              sx={{ color: '#4dabf5', fontWeight: 'bold' }}
+                            >
+                              ${salaryData.month[month].toLocaleString()}
+                            </Typography>
+                          }
+                          primaryTypographyProps={{ fontSize: '1.1rem' }}
+                          secondaryTypographyProps={{ fontSize: '1rem' }}
+                        />
+                      </ListItem>
+                    ))}
+                  </List>
+                </Paper>
               </Grid>
 
-              <Grid item xs={12} md={6} lg={6}>
-                {/* Salary Trend */}
-                <Grid item xs={12} md={7} lg={7}>
-                  <Paper
-                    elevation={3}
-                    sx={{
-                      minWidth: 350,
-                      height: 650,
-                      display: 'flex',
-                      flexDirection: 'column',
-                      p: 3,
-                      '@media (max-width:450px)': {
-                        height: 400,
-                        minWidth: 'auto',
-                      },
-                    }}
-                  >
-                    <Typography variant="h5" gutterBottom>
-                      Salary Trend
-                    </Typography>
-                    <Box sx={{ flexGrow: 1, minHeight: 0 }}>
-                      <ResponsiveContainer width="100%" height="100%">
-                        <LineChart
-                          data={chartData}
-                          margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
-                        >
-                          <CartesianGrid strokeDasharray="3 3" />
-                          <XAxis dataKey="name" tick={{ fontSize: 14 }} />
-                          <YAxis
-                            tickFormatter={(value) => `$${(value / 1000).toFixed(0)}k`}
-                            tick={{ fontSize: 14 }}
-                          />
-                          <Tooltip
-                            formatter={(value: number) => `$${value.toLocaleString()}`}
-                            labelFormatter={(label) => `Month: ${label}`}
-                          />
-                          <Line
-                            type="monotone"
-                            dataKey="salary"
-                            stroke="#3f51b5"
-                            strokeWidth={3}
-                            dot={{ r: 5 }}
-                            activeDot={{ r: 7 }}
-                          />
-                        </LineChart>
-                      </ResponsiveContainer>
-                    </Box>
-                  </Paper>
-                </Grid>
+              {/* Salary Trend */}
+              <Grid item xs={12} md={6}>
+                <Paper
+                  elevation={3}
+                  sx={{
+                    minWidth: 350,
+                    height: 650,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    p: 3,
+                    '@media (max-width:450px)': {
+                      height: 400,
+                      minWidth: 'auto',
+                    },
+                  }}
+                >
+                  <Typography variant="h5" gutterBottom>
+                    Salary Trend
+                  </Typography>
+                  <Box sx={{ flexGrow: 1, minHeight: 0 }}>
+                    <ResponsiveContainer width="100%" height="100%">
+                      <LineChart
+                        data={chartData}
+                        margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
+                      >
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="name" tick={{ fontSize: 14 }} />
+                        <YAxis
+                          tickFormatter={(value) => `$${(value / 1000).toFixed(0)}k`}
+                          tick={{ fontSize: 14 }}
+                        />
+                        <Tooltip
+                          formatter={(value: number) => `$${value.toLocaleString()}`}
+                          labelFormatter={(label) => `Month: ${label}`}
+                        />
+                        <Line
+                          type="monotone"
+                          dataKey="salary"
+                          stroke="#3f51b5"
+                          strokeWidth={3}
+                          dot={{ r: 5 }}
+                          activeDot={{ r: 7 }}
+                        />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  </Box>
+                </Paper>
               </Grid>
             </Grid>
           </Container>

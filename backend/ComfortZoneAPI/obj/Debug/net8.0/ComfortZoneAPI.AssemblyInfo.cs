@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ComfortZoneAPI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d654cb509f66df860c6a24a5b084e66fdbec6c79")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2b0aad1bdb34743f35db7171ae747d7d1031b7f5")]
 [assembly: System.Reflection.AssemblyProductAttribute("ComfortZoneAPI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ComfortZoneAPI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -127,12 +127,37 @@ function SearchPage() {
   return (
     <>
       <Navbar variant="jobsearch" />
-      <Box sx={{ padding: '2rem', margin: '0 auto', maxWidth: '1200px' }}>
-        <Typography variant="h4" sx={{ textAlign: 'center', marginTop: '4rem', marginBottom: '1rem' }}>
-          Search Results for {searchInput}
+
+      <Box
+        sx={{
+          pt: 10,
+          px: 3,
+          pb: 6,
+          mx: 'auto',
+          maxWidth: '1200px',
+          bgcolor: '#f4f6f8',
+          minHeight: '100vh',
+          fontFamily: 'Arial, sans-serif',
+        }}
+      >
+        <Typography
+          variant="h4"
+          align="center"
+          gutterBottom
+          sx={{ fontWeight: 'bold', mb: 4 }}
+        >
+          Search Results for "{searchInput}"
         </Typography>
 
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
+        {/* Search Bar + Filter Button */}
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 2,
+            mb: 4,
+          }}
+        >
           <TextField
             label="Search for jobs"
             variant="outlined"
@@ -141,25 +166,22 @@ function SearchPage() {
             onChange={(e) => setSearchQuery(e.target.value)}
             onKeyDown={handleKeyDown}
           />
-          <IconButton onClick={() => setDrawerOpen(true)}>
+          <IconButton onClick={() => setDrawerOpen(true)} aria-label="Filter jobs">
             <FilterListIcon />
           </IconButton>
         </Box>
 
+        {/* Filter Drawer */}
         <Drawer anchor="right" open={drawerOpen} onClose={() => setDrawerOpen(false)}>
-          <Box sx={{ width: 300, padding: '1rem' }}>
-            <Typography variant="h6">Filter Jobs</Typography>
+          <Box sx={{ width: 300, p: 3 }}>
+            <Typography variant="h6" gutterBottom>
+              Filter Jobs
+            </Typography>
 
-            {/* <FormControl fullWidth sx={{ marginBottom: '1rem', marginTop: '1rem' }}>
-              <InputLabel>Country</InputLabel>
-              <Select value={country} onChange={(e) => setCountry(e.target.value)} label="Country">
-                <MenuItem value="us">US</MenuItem>
-                <MenuItem value="gb">UK</MenuItem>
-              </Select>
-            </FormControl> */}
-
-            <FormGroup>
-              <Typography variant="subtitle1">Job Type</Typography>
+            <FormGroup sx={{ mb: 3 }}>
+              <Typography variant="subtitle1" sx={{ mb: 1 }}>
+                Job Type
+              </Typography>
               <FormControlLabel
                 control={
                   <Checkbox
@@ -192,7 +214,7 @@ function SearchPage() {
               />
             </FormGroup>
 
-            <FormControl fullWidth sx={{ marginY: '1rem' }}>
+            <FormControl fullWidth sx={{ mb: 3 }}>
               <InputLabel>Experience Level</InputLabel>
               <Select
                 value={experienceLevel}
@@ -206,7 +228,7 @@ function SearchPage() {
               </Select>
             </FormControl>
 
-            <FormControl fullWidth sx={{ marginBottom: '1rem' }}>
+            <FormControl fullWidth sx={{ mb: 3 }}>
               <InputLabel>Minimum Salary</InputLabel>
               <Select
                 value={salaryFilter}
@@ -219,46 +241,49 @@ function SearchPage() {
               </Select>
             </FormControl>
 
-            <Alert severity="info" sx={{ marginTop: 2 }}>
+            <Alert severity="info">
               Experience level filtering uses keyword search and may not be 100% accurate due to API limitations.
             </Alert>
           </Box>
         </Drawer>
 
-        {loading && <CircularProgress sx={{ display: 'block', margin: '0 auto' }} />}
-        {error && <Typography color="error">{error}</Typography>}
+        {/* Loading & Error States */}
+        {loading && (
+          <Box sx={{ display: 'flex', justifyContent: 'center', my: 4 }}>
+            <CircularProgress />
+          </Box>
+        )}
+        {error && (
+          <Typography color="error" align="center" sx={{ my: 2 }}>
+            {error}
+          </Typography>
+        )}
 
+        {/* No Results */}
         {!loading && !error && jobs.length === 0 && (
-          <Typography sx={{ textAlign: 'center', marginTop: '2rem' }}>
+          <Typography align="center" sx={{ mt: 4 }}>
             No results found for "{searchInput}".
           </Typography>
         )}
 
+        {/* Job Cards */}
         {!loading && !error && jobs.length > 0 && (
           <>
-            <Grid container spacing={3}>
+            <Grid container spacing={4}>
               {jobs.map((job) => (
                 <Grid item xs={12} sm={6} md={4} key={job.id}>
-                  <Card 
-                    sx={{ 
-                      display: 'flex', 
-                      flexDirection: 'column', 
+                  <Card
+                    elevation={3}
+                    sx={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'space-between',
                       height: '100%',
-                      minHeight: '200px', // Set minimum height
-                      maxHeight: '200px', // Set maximum height
                     }}
                   >
-                    <CardContent 
-                      sx={{ 
-                        flex: '1 0 auto',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: 1,
-                        overflow: 'hidden'
-                      }}
-                    >
-                      <Typography 
-                        variant="h6" 
+                    <CardContent sx={{ p: 3 }}>
+                      <Typography
+                        variant="h6"
                         sx={{
                           fontSize: '1rem',
                           fontWeight: 600,
@@ -267,49 +292,44 @@ function SearchPage() {
                           WebkitLineClamp: 2,
                           overflow: 'hidden',
                           textOverflow: 'ellipsis',
-                          lineHeight: 1.2,
-                          mb: 1
+                          mb: 1,
                         }}
                       >
                         {job.title}
                       </Typography>
-                      <Typography 
-                        variant="body2" 
+
+                      <Typography
+                        variant="body2"
                         color="textSecondary"
                         sx={{
                           display: '-webkit-box',
                           WebkitBoxOrient: 'vertical',
                           WebkitLineClamp: 1,
                           overflow: 'hidden',
-                          textOverflow: 'ellipsis'
+                          textOverflow: 'ellipsis',
                         }}
                       >
-                        {job.company?.display_name} - {job.location?.display_name}
+                        {job.company?.display_name} – {job.location?.display_name}
                       </Typography>
                     </CardContent>
-                    <CardActions 
-                      sx={{ 
+
+                    <CardActions
+                      sx={{
                         justifyContent: 'space-between',
-                        padding: 2,
-                        borderTop: '1px solid rgba(0, 0, 0, 0.12)'
+                        px: 2,
+                        py: 1,
+                        borderTop: '1px solid rgba(0, 0, 0, 0.12)',
                       }}
                     >
-                      <Button 
-                        size="small" 
-                        color="primary" 
-                        href={job.redirect_url} 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        sx={{ minWidth: 'auto' }}
-                      >
-                        View Job on Adzuna
-                      </Button>
                       <Button
                         size="small"
-                        color="primary"
-                        onClick={() => handleJobClick(job)}
-                        sx={{ minWidth: 'auto' }}
+                        href={job.redirect_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
                       >
+                        View on Adzuna
+                      </Button>
+                      <Button size="small" onClick={() => handleJobClick(job)}>
                         Details
                       </Button>
                     </CardActions>
@@ -317,7 +337,9 @@ function SearchPage() {
                 </Grid>
               ))}
             </Grid>
-            <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: '2rem' }}>
+
+            {/* Pagination */}
+            <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
               <Pagination
                 count={Math.ceil(totalJobs / RESULTS_PER_PAGE)}
                 page={currentPage}

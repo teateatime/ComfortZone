@@ -1,17 +1,21 @@
 .landing_background {
-  margin: 0;
-  height: 100vh;
-  width: 100vw;
+  position: fixed;       /* Fix the div to viewport */
+  top: 0;
+  left: 0;
+  height: 100vh;         /* Full viewport height */
+  width: 100vw;          /* Full viewport width */
   background-image: url('../images/office-desk2.jpg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  padding-top: 70px;  /* Add padding to the top to avoid overlap with fixed navbar */
+  padding-top: 70px;     /* Keep your navbar padding */
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
+  overflow-y: hidden;    /* Prevent vertical scroll inside the div */
+  overflow-x: hidden;    /* Prevent horizontal scroll */
 }
 
 h3 {

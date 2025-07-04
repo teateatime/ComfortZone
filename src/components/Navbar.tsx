@@ -62,7 +62,9 @@ function Navbar({ variant }: { variant?: 'default' | 'jobsearch' }) {
           <Button component={Link} to="/salary" color="inherit">
             Salary History
           </Button>
-          <Button color="inherit">Login/Signup</Button>
+          <Button component={Link} to="/rent-prediction" color="inherit">
+            Rent Prediction
+          </Button>
         </Box>
 
         <IconButton
@@ -90,7 +92,9 @@ function Navbar({ variant }: { variant?: 'default' | 'jobsearch' }) {
           <MenuItem onClick={handleMenuClose} component={Link} to="/salary">
             Salary History
           </MenuItem>
-          <MenuItem onClick={handleMenuClose}>Login/Signup</MenuItem>
+          <MenuItem onClick={handleMenuClose} component={Link} to="/rent-prediction">
+            Rent Prediction
+          </MenuItem>
         </Menu>
       </Toolbar>
     </AppBar>

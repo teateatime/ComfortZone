@@ -8,6 +8,7 @@ import SearchPage from './components/SearchPage.tsx';
 import DescriptionPage from './components/DescriptionPage.tsx';
 import SalaryPage from './components/SalaryPage.tsx';
 import AboutPage from './components/AboutPage.tsx';
+import RentPredictionPage from './components/RentPredictionPage.tsx';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -25,6 +26,8 @@ createRoot(document.getElementById('root')!).render(
         <Route path="/salary" element={<SalaryPage />} />
         {/* About Page */}
         <Route path="/about" element={<AboutPage />} />
+        {/* Rent Prediction Page */}
+        <Route path="/rent-prediction" element={<RentPredictionPage />} />
       </Routes>
     </Router>
   </StrictMode>

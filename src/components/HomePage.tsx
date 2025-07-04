@@ -79,8 +79,24 @@ function HomePage() {
   return (
     <>
       <Navbar variant="jobsearch" />
-      <Box sx={{ padding: '2rem', margin: '0 auto', maxWidth: '1200px', background: 'mintcream' }}>
-        <Typography variant="h4" sx={{ marginTop: '4rem', textAlign: 'center' }}>
+      <Box
+        sx={{
+          pt: 10,
+          px: 3,
+          pb: 6,
+          mx: 'auto',
+          maxWidth: '1200px',
+          bgcolor: '#f4f6f8',
+          minHeight: '100vh',
+          fontFamily: 'Arial, sans-serif',
+        }}
+      >
+        <Typography
+          variant="h4"
+          align="center"
+          gutterBottom
+          sx={{ fontWeight: 'bold', mb: 4 }}
+        >
           List of Jobs
         </Typography>
 
@@ -91,37 +107,37 @@ function HomePage() {
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           onKeyDown={handleKeyDown}
-          sx={{ marginTop: '1rem', marginBottom: '1rem' }}
+          sx={{ mb: 4 }}
         />
 
-        {loading && <CircularProgress sx={{ display: 'block', margin: '0 auto' }} />}
-        {error && <Typography color="error">{error}</Typography>}
+        {loading && (
+          <Box sx={{ display: 'flex', justifyContent: 'center', my: 4 }}>
+            <CircularProgress />
+          </Box>
+        )}
+
+        {error && (
+          <Typography color="error" align="center" sx={{ my: 2 }}>
+            {error}
+          </Typography>
+        )}
 
         {!loading && !error && (
-          <Grid container spacing={3}>
+          <Grid container spacing={4}>
             {jobs.map((job) => (
               <Grid item xs={12} sm={6} md={4} key={job.id}>
-                <Card 
-                  sx={{ 
-                    display: 'flex', 
-                    flexDirection: 'column',
+                <Card
+                  elevation={4}
+                  sx={{
                     height: '100%',
-                    minHeight: '200px',
-                    maxHeight: '200px',
-                    boxShadow: 3
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
                   }}
                 >
-                  <CardContent 
-                    sx={{ 
-                      flex: '1 0 auto',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      gap: 1,
-                      overflow: 'hidden'
-                    }}
-                  >
-                    <Typography 
-                      variant="h6" 
+                  <CardContent sx={{ flexGrow: 1, p: 3 }}>
+                    <Typography
+                      variant="h6"
                       sx={{
                         fontSize: '1rem',
                         fontWeight: 600,
@@ -130,49 +146,45 @@ function HomePage() {
                         WebkitLineClamp: 2,
                         overflow: 'hidden',
                         textOverflow: 'ellipsis',
-                        lineHeight: 1.2,
-                        mb: 1
+                        mb: 1,
                       }}
                     >
                       {job.title}
                     </Typography>
-                    <Typography 
-                      variant="body2" 
+
+                    <Typography
+                      variant="body2"
                       color="textSecondary"
                       sx={{
                         display: '-webkit-box',
                         WebkitBoxOrient: 'vertical',
                         WebkitLineClamp: 1,
                         overflow: 'hidden',
-                        textOverflow: 'ellipsis'
+                        textOverflow: 'ellipsis',
                       }}
                     >
-                      {job.company.display_name} - {job.location.display_name}
+                      {job.company.display_name} – {job.location.display_name}
                     </Typography>
                   </CardContent>
-                  <CardActions 
-                    sx={{ 
+
+                  <CardActions
+                    sx={{
                       justifyContent: 'space-between',
-                      padding: 2,
-                      borderTop: '1px solid rgba(0, 0, 0, 0.12)'
+                      px: 2,
+                      py: 1,
+                      borderTop: '1px solid rgba(0, 0, 0, 0.12)',
                     }}
                   >
-                    <Button 
-                      size="small" 
-                      color="primary" 
-                      href={job.redirect_url} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      sx={{ minWidth: 'auto' }}
-                    >
-                      View Job on Adzuna
-                    </Button>
                     <Button
                       size="small"
-                      color="primary"
-                      onClick={() => handleJobClick(job)}
-                      sx={{ minWidth: 'auto' }}
+                      href={job.redirect_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
                     >
+                      View on Adzuna
+                    </Button>
+
+                    <Button size="small" onClick={() => handleJobClick(job)}>
                       Details
                     </Button>
                   </CardActions>
